@@ -100,7 +100,8 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-[![Product Name Screen Shot][screenshot1]](res/letter.pdf)[![Product Name Screen Shot][screenshot2]](res/letter.pdf)
+[![Product Name Screen Shot][screenshot1]](res/letter.pdf)
+[![Product Name Screen Shot][screenshot2]](res/letter.pdf)
 
 During my research on writing letters with [LaTeX][LaTeX-url] and [KOMA-Script][scrlttr2-url] I encountered many great templates on the web. However, none of them met all my requirements so I decided to create my own one. This template offers
 
