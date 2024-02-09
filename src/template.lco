@@ -1,0 +1,1001 @@
+% SPDX-FileCopyrightText: Copyright (c) 2023-2024 Florian Kemser and the GerLaTeXLetter contributors
+% SPDX-License-Identifier: MIT
+%
+%===============================================================================
+%
+%         FILE:   /src/template.lco
+%
+%        USAGE:   --- (please use 'letter.tex' to create your individual letter)
+%
+%  DESCRIPTION:   General Letter Template
+%                   Only edit this file in case you would like to change the
+%                   letter's general appearance.
+%
+%         BUGS:   - A manual '\pagebreak' has to be set after each page,
+%                   otherwise the textwidth is not calculated correctly.
+%
+%        NOTES:   ---
+%
+%        TODO:    Please also look at the 'TODO:' tagged lines in this script.
+%===============================================================================
+\ProvidesFile{template.lco}
+
+\KOMAoptions{%
+  enlargefirstpage=on,  % Enlarge first page if possible
+  firsthead=off,        % Disable first header ('scrlayer-scrpage' used instead)
+  firstfoot=off,        % Disable first footer ('scrlayer-scrpage' used instead)
+  parskip,              % Full paragraph spacing
+  footsepline,          % Put separation line above footer
+  refline=nodate%       % Disable reference line
+}
+
+%===============================================================================
+%  IMPORT
+%===============================================================================
+%-------------------------------------------------------------------------------
+%  Packages
+%-------------------------------------------------------------------------------
+\RequirePackage{afterpage}          % Needed to change textwidth after first page
+\RequirePackageWithOptions{babel}   % Spelling / Hyphenation
+\RequirePackage{catchfile}          % Needed for reading environmental variables
+\RequirePackage{enumitem}           % Individual enumerations and lists
+\RequirePackage{etoolbox}           % Needed for '\notblank' tests
+\RequirePackage{fontawesome5}       % Font Awesome Free v5 (Symbols)
+%\RequirePackage{fontspec}
+\RequirePackage{graphicx}           % Logo / Signature
+\RequirePackage{iflang}             % Needed for current (babel) language check
+\RequirePackage{ifthen}             % If-then-else
+%\RequirePackage{lastpage}           % Needed for "page X of Y" footer
+\RequirePackage{qrcode}             % QR code
+\RequirePackage[footsepline]{scrlayer-scrpage}   % Header / Footer
+\RequirePackage{tabularx}           % Tables
+\RequirePackage{xstring}            % Needed for string substitution
+%\RequirePackage[showframe]{geometry}  % Show layout frames (for debugging only)
+
+\setlength{\oddsidemargin}{\useplength{toaddrhpos}}%
+\addtolength{\oddsidemargin}{-1in}%
+
+\AfterCalculatingTypearea{%
+  \setlength{\oddsidemargin}{\useplength{toaddrhpos}}%
+  \addtolength{\oddsidemargin}{-1in}%
+  %\setlength{\textwidth}{\paperwidth-\oddsidemargin-\useplength{lochpos}-\useplength{locwidth}}%
+  %\addtolength{\textwidth}{-1in}%
+}
+
+\activateareas
+
+%===============================================================================
+%  LAYOUT (GENERAL)
+%===============================================================================
+%-------------------------------------------------------------------------------
+%  Font and Typefaces
+%-------------------------------------------------------------------------------
+%  Adapted from "https://tex.stackexchange.com/a/203781"
+%  by  "Bernard" (https://tex.stackexchange.com/users/38908/bernard)
+%  licensed under "CC BY-SA 3.0" (https://creativecommons.org/licenses/by-sa/3.0/)
+%
+%  More information:
+%    LaTeX Font Catalogue: http://www.tug.dk/FontCatalogue
+%    Licenses: https://tex.stackexchange.com/a/160041
+%-------------------------------------------------------------------------------
+\usepackage[default, light, semibold]{sourcesanspro}
+
+\DeclareRobustCommand\ebseries{\fontseries{eb}\selectfont}
+\DeclareRobustCommand\sbseries{\fontseries{sb}\selectfont}
+\DeclareRobustCommand\ltseries{\fontseries{l}\selectfont}
+\DeclareRobustCommand\clseries{\fontseries{cl}\selectfont}
+
+\DeclareTextFontCommand{\texteb}{\ebseries}
+\DeclareTextFontCommand{\textsb}{\sbseries}
+\DeclareTextFontCommand{\textlt}{\ltseries}
+\DeclareTextFontCommand{\textcl}{\clseries}
+
+%-------------------------------------------------------------------------------
+%  Column types ('tabularx')
+%-------------------------------------------------------------------------------
+\newcolumntype{B}[1]{>{\raggedleft\arraybackslash}b{#1}}
+\newcolumntype{L}{l}
+\newcolumntype{Z}{>{\raggedright\arraybackslash}X}
+\newcolumntype{Y}{Z}
+
+%-------------------------------------------------------------------------------
+%  List types ('itemize', 'enumerate', 'description') (using 'enumitem')
+%-------------------------------------------------------------------------------
+%% One-level item list withvertical spacing
+%\newlist{myitemize}{itemize}{1}
+%\setlist[myitemize,1]{label=\textbullet, nosep}
+
+%===============================================================================
+%  LAYOUT (LETTER) (scrlttr2)
+%===============================================================================
+%-------------------------------------------------------------------------------
+%  Recipient address
+%-------------------------------------------------------------------------------
+%  Horizontally align dispatch field with addressee
+\setplength{specialmailindent}{0pt}
+\setplength{specialmailrightindent}{0pt}
+
+%  Remove underline format from dispatch field
+%  Source: mechanicus, https://www.mrunix.de/forums/showthread.php?62067-scrlttr2-Unterstreichung-in-Specialmail-weg&p=281648&viewfull=1#post281648
+\makeatletter
+  \renewcommand{\specialmail@format}{}
+\makeatother
+
+%-------------------------------------------------------------------------------
+%  Supplemental data ('location' field)
+%-------------------------------------------------------------------------------
+%  Horizontal alignment
+\setplength[0.5]{lochpos}{\useplength{toaddrhpos}}
+
+%  Set width/height
+\setplength{locwidth}{5cm}
+\setplength{locheight}{\textheight}
+
+
+%  Set margin between text and location field
+\newplength{lochskip}
+\setplength{lochskip}{1.25cm}
+
+%  Vertical alignment
+\setplength{locvpos}{\useplength{toaddrvpos}}
+\addtoplength{locvpos}{\useplength{backaddrheight}}
+
+%-------------------------------------------------------------------------------
+%  Opening
+%-------------------------------------------------------------------------------
+
+%-------------------------------------------------------------------------------
+%  Letter body
+%-------------------------------------------------------------------------------
+
+%-------------------------------------------------------------------------------
+%  Closing
+%-------------------------------------------------------------------------------
+%  Align signature flush-left
+\renewcommand*{\raggedsignature}{\raggedright}
+
+%-------------------------------------------------------------------------------
+%  Enclosure
+%-------------------------------------------------------------------------------
+%  Bold enclosure title, no separator
+%  Source: Johannes, https://texwelt.de/fragen/9601/wie-schreibe-ich-im-scrlttr2-den-anlagevermerk-nach-din-5008
+\setkomavar{enclseparator}[\sffamily{\bfseries\enclname}]{}
+
+%  Reformat enclosure
+%  Adapted from: Rolf Hellermann, https://de.comp.text.tex.narkive.com/OMkq51Ir/scrlttr2-enclseparator-satz-der-anlagen#post5
+\makeatletter
+\renewcommand*{\encl}[1]{\par%
+  \ifdim\parskip=\z@%
+  \vskip\baselineskip%
+  \fi\noindent%
+  \begingroup
+    \parbox[t]{\textwidth}{%
+    \Ifkomavarempty*{enclseparator}{}{%
+    \strut\usekomavar*{enclseparator}\usekomavar{enclseparator}\\%
+    }%
+    \ignorespaces #1\strut}%
+    %\parfillskip\fill\par
+    \setlength{\parfillskip}{0pt plus 1fil}
+  \endgroup
+}
+\makeatother
+
+%-------------------------------------------------------------------------------
+%  Re-define '\opening' command
+%-------------------------------------------------------------------------------
+\let\OldOpening\opening
+\renewcommand{\opening}[1]{%
+  \OldOpening{#1}
+
+  %  Shrink textwidth to ensure that there is enough space for 'location' field
+  \setlength{\textwidth}{\paperwidth}
+  \addtolengthplength[-]{\textwidth}{toaddrhpos}
+  \addtolengthplength[-]{\textwidth}{lochpos}
+  \addtolengthplength[-]{\textwidth}{locwidth}
+  \addtolengthplength[-]{\textwidth}{lochskip}
+
+  %\message{hoffset: \the\hoffset, firstheadhpos: \useplength{firstheadhpos}, firstheadwidth: \useplength{firstheadwidth}}
+  %  Shift header down (first page)
+  %\ForEachLayerOfPageStyle*{plain.scrheadings}{%
+    %\Ifstrstart{##1}{plain.scrheadings.head}{%
+      %\ModifyLayer[
+        %addvoffset=\useplength{firstheadvpos}
+      %]{##1}
+    %}{}
+  %}
+
+  %%  Shift header down (all pages but first page)
+  %\ForEachLayerOfPageStyle*{scrheadings}{%
+    %\Ifstrstart{##1}{scrheadings.head}{%
+      %\ModifyLayer[
+        %addvoffset=\useplength{firstheadvpos}
+      %]{##1}
+    %}{}
+  %}
+
+  %  Use whole page width for header
+  \KOMAoptions{%
+    headwidth=\useplength{firstheadwidth}:0in
+  }
+
+  %  Set first page to 'plain' style,
+  %  necessary for header modifications made above
+  \thispagestyle{plain}
+
+  \activateareas
+
+  %  Increase content width on the following pages as
+  %  the 'location' field is only printed on the first page
+  \afterpage{%
+    \global\setlength{\textwidth}{\useplength{firstheadwidth}}%
+    \global\setlength{\columnwidth}{\textwidth}%
+    \global\setlength{\hsize}{\columnwidth}%
+    \global\setlength{\linewidth}{\hsize}%
+    \activateareas%
+  }
+}
+
+%===============================================================================
+%  LAYOUT (HEADER/FOOTER) (scrlayer-scrpage)
+%===============================================================================
+%-------------------------------------------------------------------------------
+%  Footer / Header
+%-------------------------------------------------------------------------------
+%  Set height
+\setlength{\headheight}{85pt}
+\setlength{\footheight}{100pt}
+
+%  Shift footer line up
+\ModifyLayer[addvoffset=-2ex]{plain.scrheadings.foot.above.line}
+\ModifyLayer[addvoffset=-2ex]{scrheadings.foot.above.line}
+
+%===============================================================================
+%  COMMANDS
+%===============================================================================
+%===  COMMAND  =================================================================
+%         NAME:  br
+%  DESCRIPTION:  Conditional linebreak, needed in 'tabluarx' environments below
+%===============================================================================
+\newcommand{\br}{}
+
+%===  COMMAND  =================================================================
+%         NAME:  forcenewcolumntype
+%  DESCRIPTION:  Allow column type to be changed, e.g. for removing tabularx's
+%                indent in footer (in 'location' field they are still used)
+% PARAMETER
+%         1...:  See '\newcolumntype' documentation
+%
+%      SOURCES:  https://tex.stackexchange.com/a/157062
+%                by "yo'" (https://tex.stackexchange.com/users/11002/yo)
+%                licensed under "CC BY-SA 3.0" (https://creativecommons.org/licenses/by-sa/3.0/)
+%===============================================================================
+\newcommand\undefcolumntype[1]{\expandafter\let\csname NC@find@#1\endcsname\relax}
+\newcommand\forcenewcolumntype[1]{\undefcolumntype{#1}\newcolumntype{#1}}
+
+%===  COMMAND  =================================================================
+%         NAME:  getenv
+%  DESCRIPTION:  Get the value of a OS environmental variable
+% PARAMETER  1:  (New) macro that will store the value
+%            2:  Environmental variable
+%      EXAMPLE:  '\getenv[\username]{USER}'
+%
+%      SOURCES:  https://tex.stackexchange.com/a/62032
+%                by "egreg" (https://tex.stackexchange.com/users/4427/egreg)
+%                licensed under "CC BY-SA 4.0" (https://creativecommons.org/licenses/by-sa/4.0/)
+%===============================================================================
+%\usepackage{catchfile}
+\newcommand{\getenv}[2][]{%
+  \CatchFileEdef{\temp}{"|kpsewhich --var-value #2"}{\endlinechar=-1}%
+  \if\relax\detokenize{#1}\relax\temp\else\let#1\temp\fi}
+
+%===  COMMAND  =================================================================
+%         NAME:  separatechars
+%  DESCRIPTION:  Allows to separate all characters in a string by
+%                using one or more separator characters
+% PARAMETER  1:  Separator character/string (optional, default: '\ ')
+%            2:  String to edit
+%      EXAMPLE:  '\separatechars{abc}' results in 'a b c'
+%                '\separatechars[-]{abc}' results in 'a-b-c'
+%
+%      SOURCES:  Adapted from "https://tex.stackexchange.com/a/637839"
+%                by "Sandy G" (https://tex.stackexchange.com/users/125871/sandy-g)
+%                licensed under "CC BY-SA 4.0" (https://creativecommons.org/licenses/by-sa/4.0/)
+%===============================================================================
+\newcommand{\separatechars}[2][\ ]{%
+  \StrLen{#2}[\strlen]%
+  \StrChar{#2}{1}%
+  \foreach \chr in {2,...,\strlen}{%
+    #1\StrChar{#2}{\chr}%
+  }%
+}
+
+%===============================================================================
+%  VARIABLES
+%===============================================================================
+%-------------------------------------------------------------------------------
+%  Personal information (also used for vCard QR code) - see also 'header.lco'
+%-------------------------------------------------------------------------------
+%  See also: https://datatracker.ietf.org/doc/html/rfc6350
+%-------------------------------------------------------------------------------
+\newcommand{\fromtype}{}            % Type, either 'work' or 'home'
+
+%  Identification Properties
+\newcommand{\fromhonoricprefixes}{} % Honoric prefixes, e.g. 'Dr.'
+\newcommand{\fromgivennames}{}      % Given name(s), e.g. 'John'
+\newcommand{\fromadditionalnames}{} % Additional name(s), e.g. 'Philip'
+\newcommand{\fromsurnames}{}        % Surname(s), e.g. 'Doe'
+\newcommand{\fromhonoricsuffixes}{} % Honoric suffixes, e.g. 'Jr.'
+\newcommand{\fromfn}{}              % Full name, composed of the cmds above
+
+%  Delivery Addressing Properties
+\newcommand{\fromaddrpobox}{}       % Post office box
+\newcommand{\fromaddrapart}{}       % Apartment or suite number
+\newcommand{\fromaddrstreet}{}      % Street address, e.g. '123 Main Street'
+\newcommand{\fromaddrlocality}{}    % City, e.g. 'Anytown'
+\newcommand{\fromaddrregion}{}      % Region (state or province), e.g. 'CA'
+\newcommand{\fromaddrpostal}{}      % Postal code, e.g. '12345'
+\newcommand{\fromaddrcountry}{}     % Country, e.g. 'USA'
+
+%  Communications Properties
+\newcommand{\fromcell}{}            % Mobile
+\newcommand{\frompager}{}           % Pager
+\newcommand{\fromvoice}{}           % Phone
+\newcommand{\fromfax}{}             % Fax
+\newcommand{\fromemail}{}           % E-Mail
+
+%  Organizational Properties
+\newcommand{\fromtitle}{}           % Title, e.g. 'CEO'
+\newcommand{\fromrole}{}            % Role or function, e.g. 'Project Leader'
+\newcommand{\fromorg}{}             % Name of your organization, e.g. 'Example Inc.'
+
+%  Explanatory Properties (Social Networks)
+%  Just set your account name, the URL will be prepended automatically.
+\newcommand{\fromfacebook}{}        % Facebook
+\newcommand{\fromgithub}{}          % GitHub
+\newcommand{\frominstagram}{}       % Instagram
+\newcommand{\fromlinkedin}{}        % LinkedIn
+\newcommand{\fromtwitter}{}         % Twitter
+\newcommand{\fromyoutube}{}         % YouTube
+\newcommand{\fromxing}{}            % XING
+
+%  Explanatory Properties (Other)
+\newcommand{\fromurl}{}             % Website, e.g. 'www.example.com'
+\newcommand{\fromnote}{}            % Individual note
+
+%-------------------------------------------------------------------------------
+%  Addressee area (scrlttr2)
+%-------------------------------------------------------------------------------
+\newcommand{\fromaddress}{} % Same content as KOMA variable 'fromaddress'
+
+%-------------------------------------------------------------------------------
+%  'location' field (scrlttr2) - see also 'header.lco'
+%-------------------------------------------------------------------------------
+%  Contact Information
+\newkomavar[Contact]{loccontact}          % Contact Section
+\newkomavar[\faIcon{user}]{fromfn}        % Full name
+\newkomavar[\faIcon{phone}]{fromvoice}    % Phone
+\setkomavar*{fromfax}{\faIcon{fax}}       % Fax
+\newkomavar[\faIcon{mobile}]{fromcell}    % Mobile
+\setkomavar*{fromemail}{\faIcon{at}}      % E-Mail
+\setkomavar*{fromurl}{\faIcon{globe}}     % Website
+\newcommand{\fromvcard}{}                 % (QR code) vCard
+\newkomavar[\faIcon{camera}]{fromvcard}   % (QR code) vCard
+%\newplength{fromvcardheight}             % (QR code) vCard height, see header.lco
+
+%  Place/Date
+\newkomavar[]{locplacedate}               % Place/Date Section
+
+%  Business Hours
+\newkomavar[Business Hours]{locbushours}  % Business Hours Section
+\newkomavar[]{frombushours1}              % Business Hours 1
+\newkomavar[]{frombushours2}              % Business Hours 2
+\newkomavar[]{frombushours3}              % Business Hours 3
+
+%  Visitor / Mail Address
+\newkomavar[Address]{locaddress}                % Address Section
+\newkomavar[\faIcon{home}]{fromaddrvisitor}     % Visitor address
+\newcommand{\fromaddrmail}{}                    % Mail address
+\newkomavar[\faIcon{envelope}]{fromaddrmail}    % Mail address
+
+%  Route Instructions
+\newkomavar[How to visit us]{locroute}          % Route Section
+\newkomavar[\faIcon{bus}]{fromroutebus}         % via bus
+\newkomavar[\faIcon{car}]{fromroutecar}         % via car
+\newkomavar[\faIcon{subway}]{fromroutesubway}   % via subway
+\newkomavar[\faIcon{train}]{fromroutetrain}     % via train
+
+%  Bank Account(s)
+\newkomavar[Bank Accounts]{locbank}             % Bank Section
+\newkomavar[]{frombank1}                        % Bank 1
+\newkomavar[IBAN]{fromiban1}                    % IBAN 1
+\newkomavar[BIC]{frombic1}                      % BIC 1
+\newkomavar[]{frombank2}                        % Bank 2
+\newkomavar[IBAN]{fromiban2}                    % IBAN 2
+\newkomavar[BIC]{frombic2}                      % BIC 2
+\newkomavar[]{frombank3}                        % Bank 3
+\newkomavar[IBAN]{fromiban3}                    % IBAN 3
+\newkomavar[BIC]{frombic3}                      % BIC 3
+
+%  Fiscal Information
+\newkomavar[Fiscal Information]{locfiscal}      % Fiscal Section
+\newkomavar[]{fromtaxoffice}                    % Tax Office
+\newkomavar[Tax No]{fromtaxno}                  % Tax No
+\newkomavar[VAT No]{fromvatno}                  % VAT No
+
+%  Legal Information (Register Court)
+\newkomavar[Court of Registration]{locregister} % Register Court Section
+\newkomavar[]{fromregistercourt}                % Register Court
+\newkomavar[]{fromregisterno}                   % Register No
+
+%  Legal Information (Registered Office)
+\newkomavar[Registered Office]{locregisteredoffice}     % Registered Office Section
+\newkomavar[]{fromregisteredoffice}                     % Registered Office Location
+
+%  Legal Information (Legal Representatives)
+\newkomavar[Legal Representatives]{locrepresentatives}  % Legal Representatives Section
+\newkomavar[]{fromrepresentatives}                      % Legal Representatives
+
+%  Custom Field(s)
+\newkomavar[]{loccustom1} % Custom Field 1
+\newkomavar[]{loccustom2} % Custom Field 2
+\newkomavar[]{loccustom3} % Custom Field 3
+
+%  Language-dependent KOMA variable descriptions
+\IfLanguagePatterns{ngerman}{%
+  %  ngerman
+  \setkomavar*{loccontact}{Ihr Ansprechpartner}
+  \setkomavar*{locbushours}{Aktuelle Öffnungszeiten}
+  \setkomavar*{locaddress}{Anschrift}
+  \setkomavar*{locroute}{Anfahrt}
+  \setkomavar*{locbank}{Bankverbindungen}
+  \setkomavar*{locfiscal}{Steuerliche Angaben}
+  \setkomavar*{fromtaxno}{St.-Nr.}
+  \setkomavar*{fromvatno}{USt-IdNr.}
+  \setkomavar*{locregister}{Registergericht}
+  \setkomavar*{locregisteredoffice}{Sitz der Gesellschaft}
+  \setkomavar*{locrepresentatives}{Geschäftsführung}
+}{}
+
+%-------------------------------------------------------------------------------
+%  'letter' environment (scrlttr2) - see also 'header.lco'
+%-------------------------------------------------------------------------------
+\newkomavar[]{opening}    % Greeting
+\newkomavar[]{closing}    % Complimentary closing
+\setkomavar{signature}{}  % Signature (otherwise default mechanism will not work)
+\newkomavar[]{encl}       % Enclosure
+\newkomavar[]{cc}         % CC
+
+%-------------------------------------------------------------------------------
+%  Import variable values from 'header.lco'
+%-------------------------------------------------------------------------------
+\LoadLetterOption{header}
+
+%===============================================================================
+%  Process variables
+%===============================================================================
+%-------------------------------------------------------------------------------
+%  Modify vCard attributes
+%-------------------------------------------------------------------------------
+%  Compose full name
+\renewcommand{\fromfn}{%
+  \expandafter\notblank\expandafter{\fromhonoricprefixes}{\fromhonoricprefixes\ }{}%
+  \expandafter\notblank\expandafter{\fromgivennames}{\fromgivennames\ }{}%
+  \expandafter\notblank\expandafter{\fromadditionalnames}{\fromadditionalnames\ }{}%
+  \expandafter\notblank\expandafter{\fromsurnames}{\fromsurnames\ }{}%
+  \expandafter\notblank\expandafter{\fromhonoricsuffixes}{\fromhonoricsuffixes}{}%
+}
+
+%-------------------------------------------------------------------------------
+%  Copy vCard attributes to 'scrlttr2' variables
+%-------------------------------------------------------------------------------
+%  Set place
+\expandafter\notblank\expandafter{\fromaddrlocality}{%
+  \setkomavar{place}{\fromaddrlocality}%
+}{}
+
+%  Use company name in return address instead of a person's name, if possible
+\expandafter\notblank\expandafter{\fromorg}{%
+  \setkomavar{fromname}{\fromorg}%
+}{\setkomavar{fromname}{\fromfn}}
+
+%  Other
+\setkomavar{fromfn}{\fromfn}
+\setkomavar{fromcell}{\fromcell}
+\setkomavar{fromvoice}{\fromvoice}
+\setkomavar{fromfax}{\fromfax}
+\setkomavar{fromemail}{\fromemail}
+\setkomavar{fromurl}{\fromurl}
+
+%%  Set default signature
+%\Ifkomavarempty{signature}{%
+  %\setkomavar{signature}{\fromfn}%
+%}{}
+
+%-------------------------------------------------------------------------------
+%  Create language-dependent sender's address from vCard attributes
+%-------------------------------------------------------------------------------
+%  ngerman
+\IfLanguagePatterns{ngerman}{%
+  \renewcommand{\fromaddrmail}{%
+    \expandafter\notblank\expandafter{\fromaddrpobox}{%
+      Postfach \fromaddrpobox%
+    }{%
+      \fromaddrstreet%
+      \expandafter\notblank\expandafter{\fromaddrapart}{ // \fromaddrapart}{}%
+    }\newline%
+    \fromaddrpostal\ \fromaddrlocality%
+  }
+}
+
+%  UKenglish
+\IfLanguagePatterns{UKenglish}{%
+  \renewcommand{\fromaddrmail}{%
+    \expandafter\notblank\expandafter{\fromaddrpobox}{%
+      PO Box \fromaddrpobox%
+    }{%
+      \fromaddrstreet%
+    }\newline%
+    \fromaddrlocality\newline%
+    \expandafter\notblank\expandafter{\fromaddrregion}{\fromaddrregion\newline}{}%
+    \fromaddrpostal%
+    \expandafter\notblank\expandafter{\fromaddrcountry}{\newline}{}%
+    \fromaddrcountry%
+  }
+}
+
+%  USenglish
+\IfLanguagePatterns{USenglish}{%
+  \renewcommand{\fromaddrmail}{%
+    \expandafter\notblank\expandafter{\fromaddrpobox}{%
+      PO BOX \fromaddrpobox%
+    }{%
+      \fromaddrstreet%
+      \expandafter\notblank\expandafter{\fromaddrapart}{, \fromaddrapart}{}%
+    }\newline%
+    \fromaddrlocality,\ \fromaddrregion\ \fromaddrpostal%
+    \expandafter\notblank\expandafter{\fromaddrcountry}{\newline}{}%
+    \fromaddrcountry%
+  }
+}
+
+%  For use in return address field ('fromaddress' (scrlttr2))
+\StrSubstitute{\fromaddrmail}{\newline}{\\}[\fromaddress]
+
+%  For use in supplementary field ('location' (scrlttr2))
+\setkomavar{fromaddrmail}{%
+  \expandafter\notblank\expandafter{\fromorg}{\fromorg}{\fromfn}\newline%
+  \fromaddrmail%
+}
+
+%  Copy to 'scrlttr2' variable
+\setkomavar{fromaddress}{\fromaddress}
+
+%===============================================================================
+%  Create 'location' field (scrlttr2)
+%===============================================================================
+%-------------------------------------------------------------------------------
+%  Contact
+%-------------------------------------------------------------------------------
+\Ifkomavarempty{fromfn}{}{%
+  \setkomavar{loccontact}{%
+    \renewcommand{\br}{}%
+    \begin{tabularx}{\useplength{locwidth}}{LZ}%
+      \usekomavar*{fromfn} & \usekomavar{fromfn}\\%
+      \expandafter\notblank\expandafter{\fromvoice}{\br\usekomavar*{fromvoice} & \usekomavar{fromvoice}\renewcommand{\br}{\\}}{}%
+      \expandafter\notblank\expandafter{\fromfax}{\br\usekomavar*{fromfax} & \usekomavar{fromfax}\renewcommand{\br}{\\}}{}%
+      \expandafter\notblank\expandafter{\fromcell}{\br\usekomavar*{fromcell} & \usekomavar{fromcell}\renewcommand{\br}{\\}}{}%
+      \expandafter\notblank\expandafter{\fromemail}{\br\usekomavar*{fromemail} & \usekomavar{fromemail}\renewcommand{\br}{\\}}{}%
+      \expandafter\notblank\expandafter{\fromurl}{\br\usekomavar*{fromurl} & \usekomavar{fromurl}\renewcommand{\br}{\\}}{}%
+      \expandafter\notblank\expandafter{\fromvcard}{\br\usekomavar*{fromvcard} & \usekomavar{fromvcard}}{}%
+    \end{tabularx}%
+  }
+}
+
+%-------------------------------------------------------------------------------
+%  Place / Date
+%-------------------------------------------------------------------------------
+\Ifkomavarempty{place}{}{%
+  \setkomavar{locplacedate}{%
+    \usekomavar{place}\usekomavar{placeseparator}\usekomavar{date}%
+  }%
+}
+
+%-------------------------------------------------------------------------------
+%  Business Hours
+%-------------------------------------------------------------------------------
+\newboolean{showlocbushours}
+\setboolean{showlocbushours}{false}
+
+\Ifkomavarempty{frombushours1}{%
+  \Ifkomavarempty{frombushours2}{%
+    \Ifkomavarempty{frombushours3}{}{%
+      \setboolean{showlocbushours}{true}%
+    }%
+  }{\setboolean{showlocbushours}{true}}%
+}{\setboolean{showlocbushours}{true}}
+
+\ifthenelse{\boolean{showlocbushours}}{%
+  \setkomavar{locbushours}{%
+    \renewcommand{\br}{}%
+    \begin{tabularx}{\useplength{locwidth}}{LZ}%
+      \Ifkomavarempty{frombushours1}{}{\usekomavar*{frombushours1} & \usekomavar{frombushours1}\renewcommand{\br}{\\}}%
+      \Ifkomavarempty{frombushours2}{}{\br\usekomavar*{frombushours2} & \usekomavar{frombushours2}\renewcommand{\br}{\\}}%
+      \Ifkomavarempty{frombushours3}{}{\br\usekomavar*{frombushours3} & \usekomavar{frombushours3}}%
+    \end{tabularx}%
+  }%
+}{}
+
+%-------------------------------------------------------------------------------
+%  Address
+%-------------------------------------------------------------------------------
+\Ifkomavarempty{fromaddrmail}{}{%
+  \setkomavar{locaddress}{%
+    \renewcommand{\br}{}%
+    \begin{tabularx}{\useplength{locwidth}}{LZ}%
+      \Ifkomavarempty{fromaddrvisitor}{\usekomavar*{fromaddrvisitor} }{\usekomavar*{fromaddrvisitor} & \usekomavar{fromaddrvisitor}\renewcommand{\br}{\\}}%
+      \Ifkomavarempty{fromaddrmail}{}{\br\usekomavar*{fromaddrmail} & \usekomavar{fromaddrmail}}%
+    \end{tabularx}%
+  }%
+}
+
+%-------------------------------------------------------------------------------
+%  Route Instruction(s)
+%-------------------------------------------------------------------------------
+\newboolean{showlocroute}
+\setboolean{showlocroute}{false}
+
+\Ifkomavarempty{fromroutebus}{%
+  \Ifkomavarempty{fromroutecar}{%
+    \Ifkomavarempty{fromroutesubway}{%
+      \Ifkomavarempty{fromroutetrain}{}{%
+        \setboolean{showlocroute}{true}%
+      }%
+    }{\setboolean{showlocroute}{true}}%
+  }{\setboolean{showlocroute}{true}}%
+}{\setboolean{showlocroute}{true}}
+
+\ifthenelse{\boolean{showlocroute}}{%
+  \setkomavar{locroute}{%
+    \renewcommand{\br}{}
+    \begin{tabularx}{\useplength{locwidth}}{LZ}%
+      \Ifkomavarempty{fromroutebus}{}{\usekomavar*{fromroutebus} & \usekomavar{fromroutebus}\renewcommand{\br}{\\}}%
+      \Ifkomavarempty{fromroutesubway}{}{\br\usekomavar*{fromroutesubway} & \usekomavar{fromroutesubway}\renewcommand{\br}{\\}}%
+      \Ifkomavarempty{fromroutetrain}{}{\br\usekomavar*{fromroutetrain} & \usekomavar{fromroutetrain}\renewcommand{\br}{\\}}%
+      \Ifkomavarempty{fromroutecar}{}{\br\usekomavar*{fromroutecar} & \usekomavar{fromroutecar}}%
+    \end{tabularx}%
+  }%
+}{}
+
+%-------------------------------------------------------------------------------
+%  Bank Account(s)
+%-------------------------------------------------------------------------------
+\setkomavar{locbank}{%
+  %  Bank 1
+  \Ifkomavarempty{frombank1}{}{%
+    \renewcommand{\br}{}%
+    \textbf{\usekomavar{frombank1}}\\
+    \begin{tabularx}{\useplength{locwidth}}{LZ}%
+      \Ifkomavarempty{fromiban1}{}{\usekomavar*{fromiban1} & \usekomavar{fromiban1}\renewcommand{\br}{\\}}%
+      \Ifkomavarempty{frombic1}{}{\br\usekomavar*{frombic1} & \usekomavar{frombic1}}%
+    \end{tabularx}%
+  }%
+  %
+  %  Bank 2
+  \Ifkomavarempty{frombank2}{}{%
+
+    \renewcommand{\br}{}%
+    \textbf{\usekomavar{frombank2}}\\
+    \begin{tabularx}{\useplength{locwidth}}{LZ}%
+      \Ifkomavarempty{fromiban2}{}{\usekomavar*{fromiban2} & \usekomavar{fromiban2}\renewcommand{\br}{\\}}%
+      \Ifkomavarempty{frombic2}{}{\br\usekomavar*{frombic2} & \usekomavar{frombic2}}%
+    \end{tabularx}%
+  }%
+  %
+  %  Bank 3
+  \Ifkomavarempty{frombank3}{}{%
+
+    \renewcommand{\br}{}%
+    \textbf{\usekomavar{frombank3}}\\
+    \begin{tabularx}{\useplength{locwidth}}{LZ}%
+      \Ifkomavarempty{fromiban3}{}{\usekomavar*{fromiban3} & \usekomavar{fromiban3}\renewcommand{\br}{\\}}%
+      \Ifkomavarempty{frombic3}{}{\br\usekomavar*{frombic3} & \usekomavar{frombic3}}%
+    \end{tabularx}%
+  }%
+}
+
+%-------------------------------------------------------------------------------
+%  Fiscal Information
+%-------------------------------------------------------------------------------
+\newboolean{showlocfiscal}
+\setboolean{showlocfiscal}{false}
+
+\Ifkomavarempty{fromtaxno}{%
+  \Ifkomavarempty{fromvatno}{}{%
+    \setboolean{showlocfiscal}{true}%
+  }%
+}{\setboolean{showlocfiscal}{true}}
+
+\ifthenelse{\boolean{showlocfiscal}}{%
+  \Ifkomavarempty{fromtaxoffice}{}{%
+    \setkomavar*{locfiscal}{\usekomavar{fromtaxoffice}}%
+  }%
+
+  \setkomavar{locfiscal}{%
+    \renewcommand{\br}{}%
+    \begin{tabularx}{\useplength{locwidth}}{LZ}%
+      \Ifkomavarempty{fromtaxno}{}{\usekomavar*{fromtaxno} & \usekomavar{fromtaxno}\renewcommand{\br}{\\}}%
+      \Ifkomavarempty{fromvatno}{}{\br\usekomavar*{fromvatno} & \usekomavar{fromvatno}}%
+    \end{tabularx}%
+  }%
+}{}
+
+%-------------------------------------------------------------------------------
+%  Register Court
+%-------------------------------------------------------------------------------
+\Ifkomavarempty{fromregistercourt}{}{%
+  \setkomavar{locregister}{%
+    \begin{tabularx}{\useplength{locwidth}}{Y}%
+      \usekomavar{fromregistercourt}\\
+      \usekomavar{fromregisterno}%
+    \end{tabularx}%
+  }%
+}
+
+%-------------------------------------------------------------------------------
+%  Registered Office
+%-------------------------------------------------------------------------------
+\Ifkomavarempty{fromregisteredoffice}{}{%
+ \setkomavar{locregisteredoffice}{%
+    \begin{tabularx}{\useplength{locwidth}}{Y}%
+      \usekomavar{fromregisteredoffice}%
+    \end{tabularx}%
+  }%
+}
+
+%-------------------------------------------------------------------------------
+%  Legal Representatives
+%-------------------------------------------------------------------------------
+\Ifkomavarempty{fromrepresentatives}{}{%
+  \setkomavar{locrepresentatives}{%
+    \begin{tabularx}{\useplength{locwidth}}{Y}%
+      \usekomavar{fromrepresentatives}%
+    \end{tabularx}%
+  }%
+}
+
+%-------------------------------------------------------------------------------
+%  Compose parts
+%-------------------------------------------------------------------------------
+\setkomavar{location}{%
+  %  Font Settings
+  \footnotesize
+  \renewcommand{\arraystretch}{1.25}
+  \setlength{\parskip}{0.75\parskip}
+
+  %  Contact
+  \Ifkomavarempty{loccontact}{}{%
+    \textbf{\usekomavar*{loccontact}}\\
+    \usekomavar{loccontact}%
+  }%
+  %
+  %  Place / Date
+  \Ifkomavarempty{locplacedate}{}{%
+
+    \usekomavar{locplacedate}%
+  }%
+  %
+  %  Business Hours
+  \Ifkomavarempty{locbushours}{}{%
+
+    \textbf{\usekomavar*{locbushours}}\\
+    \usekomavar{locbushours}%
+  }%
+  %
+  %  Address
+  \Ifkomavarempty{locaddress}{}{%
+
+    \textbf{\usekomavar*{locaddress}}\\[1ex]
+    \usekomavar{locaddress}%
+  }%
+  %
+  %  Route Instruction(s)
+  \Ifkomavarempty{locroute}{}{%
+
+    \textbf{\usekomavar*{locroute}}\\[1ex]
+    \usekomavar{locroute}%
+  }%
+  %
+  %  Bank Account(s)
+  \Ifkomavarempty{locbank}{}{%
+
+    \usekomavar{locbank}%
+  }%
+  %
+  %  Fiscal Information
+  \Ifkomavarempty{locfiscal}{}{%
+
+    \textbf{\usekomavar*{locfiscal}}\\
+    \usekomavar{locfiscal}%
+  }%
+  %
+  %  Register Court
+  \Ifkomavarempty{locregister}{}{%
+
+    \textbf{\usekomavar*{locregister}}\\
+    \usekomavar{locregister}%
+  }%
+  %
+  %  Registered Office
+  \Ifkomavarempty{locregisteredoffice}{}{%
+
+    \textbf{\usekomavar*{locregisteredoffice}}\\
+    \usekomavar{locregisteredoffice}%
+  }%
+  %
+  %  Legal Representatives
+  \Ifkomavarempty{locrepresentatives}{}{%
+
+    \textbf{\usekomavar*{locrepresentatives}}\\
+    \usekomavar{locrepresentatives}%
+  }%
+  %
+  %  Custom Field 1
+  \Ifkomavarempty{loccustom1}{}{%
+
+    \Ifkomavarempty*{loccustom1}{%
+      \usekomavar{loccustom1}%
+    }{%
+      \textbf{\usekomavar*{loccustom1}}\\%
+      \begin{tabularx}{\useplength{locwidth}}{Y}%
+        \usekomavar{loccustom1}%
+      \end{tabularx}%
+    }%
+  }%
+  %
+  %  Custom Field 2
+  \Ifkomavarempty{loccustom2}{}{%
+
+    \Ifkomavarempty*{loccustom2}{%
+      \usekomavar{loccustom2}%
+    }{%
+      \textbf{\usekomavar*{loccustom2}}\\%
+      \begin{tabularx}{\useplength{locwidth}}{Y}%
+        \usekomavar{loccustom2}%
+      \end{tabularx}%
+    }%
+  }%
+  %
+  %  Custom Field 3
+  \Ifkomavarempty{loccustom3}{}{%
+
+    \Ifkomavarempty*{loccustom3}{%
+      \usekomavar{loccustom3}%
+    }{%
+      \textbf{\usekomavar*{loccustom3}}\\%
+      \begin{tabularx}{\useplength{locwidth}}{Y}%
+        \usekomavar{loccustom3}%
+      \end{tabularx}%
+    }%
+  }%
+}
+
+%===============================================================================
+%  Create (QR code) vCard (only if pseudolength 'fromvcardheight' is set)
+%===============================================================================
+%  See also: https://datatracker.ietf.org/doc/html/rfc6350
+%===============================================================================
+\Ifplength{fromvcardheight}{%
+  %  vCard ('^^J' is needed for linebreaks)
+  \edef\fromvcard{%
+    BEGIN:VCARD^^J%
+    VERSION:4.0^^J%
+    FN:\fromfn^^J%
+    N:\fromsurnames;\fromgivennames;\fromadditionalnames;\fromhonoricprefixes;\fromhonoricsuffixes^^J%
+    \expandafter\notblank\expandafter{\fromcell}{TEL;TYPE=cell:\fromcell^^J}{}%
+    \expandafter\notblank\expandafter{\frompager}{TEL;TYPE=pager:\frompager^^J}{}%
+    \expandafter\notblank\expandafter{\fromvoice}{TEL;TYPE=\fromtype,VOICE:\fromvoice^^J}{}%
+    \expandafter\notblank\expandafter{\fromfax}{TEL;TYPE=\fromtype,FAX:\fromfax^^J}{}%
+    \expandafter\notblank\expandafter{\fromemail}{EMAIL;TYPE=\fromtype:\fromemail^^J}{}%
+    \expandafter\notblank\expandafter{\fromaddrlocality}{ADR;TYPE=\fromtype:\fromaddrpobox;\fromaddrapart;\fromaddrstreet;\fromaddrlocality;\fromaddrregion;\fromaddrpostal;\fromaddrcountry^^J}{}%
+    \expandafter\notblank\expandafter{\fromtitle}{TITLE:\fromtitle^^J}{}%
+    \expandafter\notblank\expandafter{\fromrole}{ROLE:\fromrole^^J}{}%
+    \expandafter\notblank\expandafter{\fromorg}{ORG:\fromorg^^J}{}%
+    \expandafter\notblank\expandafter{\fromnote}{NOTE:\fromnote^^J}{}%
+    \expandafter\notblank\expandafter{\fromurl}{URL;TYPE=\fromtype:https://\fromurl^^J}{}%
+    \expandafter\notblank\expandafter{\fromfacebook}{URL:https://facebook.com/\fromfacebook^^J}{}%
+    \expandafter\notblank\expandafter{\fromgithub}{URL:https://github.com/\fromgithub^^J}{}%
+    \expandafter\notblank\expandafter{\frominstagram}{URL:https://www.instagram.com/\frominstagram^^J}{}%
+    \expandafter\notblank\expandafter{\fromlinkedin}{URL:https://www.linkedin.com/\fromlinkedin^^J}{}%
+    \expandafter\notblank\expandafter{\fromtwitter}{URL:https://twitter.com/\fromtwitter^^J}{}%
+    \expandafter\notblank\expandafter{\fromyoutube}{URL:https://youtube.com/user/\fromyoutube^^J}{}%
+    \expandafter\notblank\expandafter{\fromxing}{URL:https://www.xing.com/profile/\fromxing^^J}{}%
+  END:VCARD^^J%
+  }
+
+  %  Spaces need to be escaped
+  \StrSubstitute{\fromvcard}{ }{\ }[\fromvcard]
+
+  %  Create QR code
+  \setkomavar{fromvcard}{\qrcode[height=\useplength{fromvcardheight}]{\fromvcard}}%
+}{}
+
+%===============================================================================
+%  Create header and footer ('scrlayer-scrpage')
+%===============================================================================
+%-------------------------------------------------------------------------------
+%  Header ('scrlayer-scrpage')
+%-------------------------------------------------------------------------------
+\lohead*{\hfill\usekomavar{fromlogo}}
+
+%-------------------------------------------------------------------------------
+%  Footer ('scrlayer-scrpage')
+%-------------------------------------------------------------------------------
+%  Left
+\lofoot[]{%
+  %  Font Settings
+  \footnotesize%
+  %
+  %  Remove first cell's indent from the 'tabularx' tables
+  %  stored in 'loc...' variables
+  \forcenewcolumntype{L}{@{}l}%
+  \forcenewcolumntype{Y}{@{}Z}%
+  %
+  %  3-column footer
+  \begin{tabularx}{\textwidth}{ZZZ}%
+    %---------------------------------------------------------------------------
+    %  First row
+    %---------------------------------------------------------------------------
+    %  Mail Address
+    \usekomavar{fromaddrmail}
+
+    &
+
+    %  Fiscal Information
+    \Ifkomavarempty{locfiscal}{}{%
+      \usekomavar*{locfiscal}\newline
+      \usekomavar{locfiscal}
+    }
+
+    &
+
+    %  Register Court
+    \Ifkomavarempty{locregister}{}{%
+      \usekomavar*{locregister}\newline
+      \usekomavar{locregister}
+    }
+
+    \\
+
+    %---------------------------------------------------------------------------
+    %  Second row
+    %---------------------------------------------------------------------------
+    %  Legal Representatives
+    \Ifkomavarempty{locrepresentatives}{}{%
+      \usekomavar*{locrepresentatives}\newline
+      \usekomavar{locrepresentatives}
+    }
+
+    &
+
+    %  Registered Office
+    \Ifkomavarempty{locregisteredoffice}{}{%
+      \usekomavar*{locregisteredoffice}\newline
+      \usekomavar{locregisteredoffice}
+    }
+
+    &
+
+    %  Page Number
+    % \multicolumn{1}{B{0.3\textwidth}}{\pagemark}
+    % \multicolumn{1}{B{0.3\textwidth}}{\usekomafont{pagenumber}{\thepage~|~\pageref{LastPage}}}
+    \multicolumn{1}{B{0.3\textwidth}}{\usekomafont{pagenumber}{\thepage}}
+  \end{tabularx}
+}
+
+%  Center
+\cofoot[]{%
+}
+
+%  Right
+\rofoot[]{%
+}

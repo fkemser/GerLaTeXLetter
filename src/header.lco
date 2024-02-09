@@ -1,0 +1,172 @@
+% SPDX-FileCopyrightText: Copyright (c) 2023-2024 Florian Kemser and the GerLaTeXLetter contributors
+% SPDX-License-Identifier: MIT
+%
+%===============================================================================
+%
+%         FILE:   /src/header.lco
+%
+%        USAGE:   --- (please use 'letter.tex' to create your individual letter)
+%
+%  DESCRIPTION:   Header/Footer/Information Block Template
+%                   Edit this file to set your footer/header
+%
+%         BUGS:   ---
+%
+%        NOTES:   ---
+%
+%        TODO:    Please also look at the 'TODO:' tagged lines in this script.
+%===============================================================================
+\ProvidesFile{header.lco}
+
+%===============================================================================
+%                               START EDITING HERE
+%
+%                                      |||
+%                                     \|||/
+%                                      \|/
+%===============================================================================
+%===============================================================================
+%  GLOBAL VARIABLES
+%===============================================================================
+%-------------------------------------------------------------------------------
+%  Personal information (also used for vCard QR code)
+%-------------------------------------------------------------------------------
+%  See also: https://datatracker.ietf.org/doc/html/rfc6350
+%-------------------------------------------------------------------------------
+%  vCard 'type', has to be either 'work' or 'private'
+\renewcommand{\fromtype}{work}
+
+%  Identification Properties
+\renewcommand{\fromhonoricprefixes}{Dr.}        % Honoric prefixes, e.g. 'Dr.'
+\renewcommand{\fromgivennames}{Max}             % Given name(s), e.g. 'John'
+\renewcommand{\fromadditionalnames}{}           % Additional name(s), e.g. 'Philip'
+\renewcommand{\fromsurnames}{Mustermann}        % Surname(s), e.g. 'Doe'
+\renewcommand{\fromhonoricsuffixes}{}           % Honoric suffixes, e.g. 'Jr.'
+
+%  Delivery Addressing Properties
+\renewcommand{\fromaddrpobox}{}                 % Post office box
+\renewcommand{\fromaddrapart}{}                 % Apartment or suite number
+\renewcommand{\fromaddrstreet}{Musterstraße 1}  % Street address, e.g. '123 Main Street'
+\renewcommand{\fromaddrlocality}{Musterstadt}   % City, e.g. 'Anytown'
+\renewcommand{\fromaddrregion}{}                % Region (state or province), e.g. 'CA'
+\renewcommand{\fromaddrpostal}{12345}           % Postal code, e.g. '12345'
+\renewcommand{\fromaddrcountry}{}               % Country, e.g. 'USA'
+
+%  Communications Properties
+\renewcommand{\fromcell}{+49-160-123456789}       % Mobile
+\renewcommand{\frompager}{}                       % Pager
+\renewcommand{\fromvoice}{+49-1234-56789-1}       % Phone
+\renewcommand{\fromfax}{+49-1234-56789-2}         % Fax
+\renewcommand{\fromemail}{mustermann@beispiel.de} % E-Mail
+
+%  Organizational Properties
+\renewcommand{\fromtitle}{Geschäftsführer}      % Title, e.g. 'CEO'
+\renewcommand{\fromrole}{}                      % Role or function, e.g. 'Project Leader'
+\renewcommand{\fromorg}{Beispiel GmbH}          % Your organization, e.g. 'Example Inc.'
+
+%  Explanatory Properties (Social Networks)
+%  Just set your account name, the URL will be prepended automatically
+\renewcommand{\fromfacebook}{}  % Facebook
+\renewcommand{\fromgithub}{}    % GitHub
+\renewcommand{\frominstagram}{} % Instagram
+\renewcommand{\fromlinkedin}{}  % LinkedIn
+\renewcommand{\fromtwitter}{}   % Twitter
+\renewcommand{\fromyoutube}{}   % YouTube
+\renewcommand{\fromxing}{}      % XING
+
+%  Explanatory Properties (Other)
+\renewcommand{\fromurl}{www.beispiel.de}  % Website, e.g. 'www.example.com'
+\renewcommand{\fromnote}{}                % Individual note
+
+%-------------------------------------------------------------------------------
+%  scrlttr2 ('location' field)
+%-------------------------------------------------------------------------------
+%  IMPORTANT: When inserting linebreaks please use '\newline' instead of '\\'
+%-------------------------------------------------------------------------------
+%  vCard / QR code
+%  TODO:  Comment both (!) lines to disable vCard / QR code
+\newplength{fromvcardheight}
+\setplength{fromvcardheight}{2.00cm}
+
+%  Visitor Address (if different from mail address set above)
+\setkomavar{fromaddrvisitor}{%
+}
+
+%  Business Hours
+\setkomavar{frombushours1}[Mo - Mi]{08:00 - 17:00}
+\setkomavar{frombushours2}[Do - Fr]{08:00 - 15:00}
+\setkomavar{frombushours3}[]{}
+
+%  Route Instructions
+%  via bus
+\setkomavar{fromroutebus}{%
+  11 Musterstraße\newline
+  22 Musterplatz%
+}
+%  via car
+\setkomavar{fromroutecar}{%
+}
+%  via subway
+\setkomavar{fromroutesubway}{%
+  U1 Musterstraße%
+}
+%  via train
+\setkomavar{fromroutetrain}{%
+}
+
+%  Bank Account(s)
+%  Bank 1
+\setkomavar{frombank1}{Musterbank AG}
+\setkomavar{fromiban1}{DE00~0000~1111~2345~6789}
+\setkomavar{frombic1}{BANMUS0000}
+%  Bank 2
+%\setkomavar{frombank2}{Musterbank AG}
+%\setkomavar{fromiban2}{DE00~0000~1111~2345~6789}
+%\setkomavar{frombic2}{BANMUS0000}
+%  Bank 3
+%\setkomavar{frombank3}{Musterbank AG}
+%\setkomavar{fromiban3}{DE00~0000~1111~2345~6789}
+%\setkomavar{frombic3}{BANMUS0000}
+
+%  Fiscal Information
+\setkomavar{fromtaxoffice}{Finanzamt Musterstadt}
+\setkomavar{fromtaxno}{111/222/34567}
+\setkomavar{fromvatno}{DE~123~456~789}
+
+%  Legal Information (Register Court)
+\setkomavar{fromregistercourt}{Amtsgericht~Musterstadt}
+\setkomavar{fromregisterno}{HRB~12345}
+
+%  Legal Information (Registered Office)
+\setkomavar{fromregisteredoffice}{Musterstadt}
+
+%  Legal Information (Legal Representatives)
+\setkomavar{fromrepresentatives}{%
+  Max~Mustermann, Erika~Musterfrau%
+}
+
+%  Custom Fields
+\setkomavar{loccustom1}[]{}
+\setkomavar{loccustom2}[]{}
+\setkomavar{loccustom3}[]{}
+
+%-------------------------------------------------------------------------------
+%  scrlttr2 (variables)
+%-------------------------------------------------------------------------------
+%  Logo
+%    TODO:  Comment this line to disable the logo,
+%           or change 'logo' to the filename of your logo
+%           (without extension, file must be in the same folder as this file)
+%    TODO:  Use '[width=...]' or '[height=...]' to change the logo's size
+\setkomavar{fromlogo}{\includegraphics[height=1.25cm]{logo}}
+
+%  Signature
+%  To insert the person's full name defined above use '\fromfn'
+\setkomavar{signature}{\fromfn}
+%===============================================================================
+%                                      /|\
+%                                     /|||\
+%                                      |||
+%
+%                               STOP EDITING HERE
+%===============================================================================

@@ -1,0 +1,208 @@
+% SPDX-FileCopyrightText: Copyright (c) 2023-2024 Florian Kemser and the GerLaTeXLetter contributors
+% SPDX-License-Identifier: MIT
+%
+%===============================================================================
+%
+%         FILE:   /src/letter.tex
+%
+%        USAGE:   > lualatex letter
+%                 (creates a PDF file named 'letter.pdf')
+%
+%  DESCRIPTION:   Sample Letter
+%                   Edit this file to write your individual letter
+%
+% REQUIREMENTS:   See </README.md>
+%
+%         BUGS:   - A manual '\pagebreak' has to be set after each page,
+%                   otherwise the textwidth is not calculated correctly.
+%
+%        NOTES:   This project consists of four files:
+%
+%             /src/
+%                 ├── header.lco      Header/Footer/Information Block Template
+%                 │                     => SET YOUR HEADER/FOOTER HERE <=
+%                 │
+%                 ├── letter.tex      Sample Letter (LaTeX)
+%                 │                     => WRITE YOUR INDIVIDUAL LETTER HERE <=
+%                 │
+%                 ├── logo.png        Sample Logo
+%                 |                     Source: https://logoipsum.com/
+%                 │                     => REPLACE THIS FILE BY YOUR OWN LOGO <=
+%                 │
+%                 └── template.lco    General Letter Template
+%                                       Only edit this file in case you would
+%                                       like to change the letter's general
+%                                       appearance.
+%
+%        TODO:    Please also look at the 'TODO:' tagged lines in this script.
+%===============================================================================
+%===============================================================================
+%  IMPORT
+%===============================================================================
+%  DO NOT EDIT - LOAD SCRLTTR2 - DO NOT EDIT
+\documentclass[version=last]{scrlttr2}
+%  DO NOT EDIT - LOAD SCRLTTR2 - DO NOT EDIT
+
+%-------------------------------------------------------------------------------
+%  Packages
+%-------------------------------------------------------------------------------
+\usepackage[ngerman]{babel} % Spelling / Hyphenation
+\usepackage{blindtext}      % Text samples
+
+%  DO NOT EDIT - LOAD LETTER TEMPLATE - DO NOT EDIT
+\LoadLetterOption{template}
+%  DO NOT EDIT - LOAD LETTER TEMPLATE - DO NOT EDIT
+
+%===============================================================================
+%  VARIABLES
+%===============================================================================
+%-------------------------------------------------------------------------------
+%  KOMA script variables (declaration)
+%-------------------------------------------------------------------------------
+%\newkomavar[description]{varname}
+
+%-------------------------------------------------------------------------------
+%  KOMA script variables (language-dependent description)
+%-------------------------------------------------------------------------------
+%  Default
+%\setkomavar*{varname}{description_default}
+
+%  ngerman
+\IfLanguagePatterns{ngerman}{%
+%  \setkomavar*{varname}{description_ngerman}
+}{}
+
+%-------------------------------------------------------------------------------
+%  KOMA script variables (language-dependent initialization)
+%-------------------------------------------------------------------------------
+%  Default
+%\setkomavar{varname}{value_default}
+%  ngerman
+\IfLanguagePatterns{ngerman}{%
+%  \setkomavar{varname}{value_ngerman}
+}{}
+
+%-------------------------------------------------------------------------------
+%  Environmental (OS) variables
+%-------------------------------------------------------------------------------
+%\getenv[\macroname]{envvarname}
+
+%-------------------------------------------------------------------------------
+%  Other
+%-------------------------------------------------------------------------------
+
+%===============================================================================
+%  ADDRESSEE
+%===============================================================================
+%               TODO: PUT INFORMATION ABOUT YOUR RECIPIENT HERE
+%
+%                                        |||
+%                                       \|||/
+%                                        \|/
+%===============================================================================
+%-------------------------------------------------------------------------------
+%  Addressee-independent
+%-------------------------------------------------------------------------------
+%  Delivery Information ("Zustellvermerk")
+\setkomavar{specialmail}{%
+\\
+\\
+Persönlich / Vertraulich%
+}
+
+%  Subject
+\setkomavar{subject}{Betreff}
+
+%  Complimentary closing
+\setkomavar{closing}{Mit freundlichen Grüßen\\im Auftrag}
+
+%  Signature (only uncomment if different from header.lco
+%\setkomavar{signature}{Max Mustermann}
+
+%  Enclosure
+\setkomavar{encl}{%
+  Anlage 1\\
+  Anlage 2%
+}
+
+%  CC
+\setkomavar{cc}{%
+}
+
+%-------------------------------------------------------------------------------
+%  Addressee-specific
+%-------------------------------------------------------------------------------
+%  Full name
+\setkomavar{toname}{Erika Mustermann}
+
+%  Mail address
+\setkomavar{toaddress}{%
+  Musterstraße 9\\
+  12345 Musterstadt%
+}
+
+%  Salutation
+\setkomavar{opening}{Sehr geehrte Frau Mustermann,}
+%===============================================================================
+%                                        /|\
+%                                       /|||\
+%                                        |||
+%
+%               TODO: PUT INFORMATION ABOUT YOUR RECIPIENT HERE
+%===============================================================================
+
+%===============================================================================
+%  BEGIN DOCUMENT
+%===============================================================================
+%-------------------------------------------------------------------------------
+%  DO NOT EDIT
+%-------------------------------------------------------------------------------
+\begin{document}
+  \begin{letter}{}
+
+  \opening{\usekomavar{opening}}
+%-------------------------------------------------------------------------------
+%  DO NOT EDIT
+%-------------------------------------------------------------------------------
+  %-----------------------------------------------------------------------------
+  %  BODY
+  %-----------------------------------------------------------------------------
+  %-----------------------------------------------------------------------------
+  %                         TODO: WRITE YOUR LETTER HERE
+  %
+  %                                      |||
+  %                                     \|||/
+  %                                      \|/
+  %-----------------------------------------------------------------------------
+  % Please insert a manual '\pagebreak' after each page, otherwise the
+  % textwidth will not be calculated correctly.
+  \blindtext
+
+  \blindtext\pagebreak
+
+  \blindtext
+  %-----------------------------------------------------------------------------
+  %                                      /|\
+  %                                     /|||\
+  %                                      |||
+  %
+  %                         TODO: WRITE YOUR LETTER HERE
+  %-----------------------------------------------------------------------------
+%-------------------------------------------------------------------------------
+%  DO NOT EDIT
+%-------------------------------------------------------------------------------
+  \closing{\usekomavar{closing}}
+  \Ifkomavarempty{encl}{}{%
+    \encl{\usekomavar{encl}}%
+  }
+  \Ifkomavarempty{cc}{}{%
+    \cc{\usekomavar{cc}}%
+  }
+  \end{letter}
+\end{document}
+%-------------------------------------------------------------------------------
+%  DO NOT EDIT
+%-------------------------------------------------------------------------------
+%===============================================================================
+%  END DOCUMENT
+%===============================================================================
