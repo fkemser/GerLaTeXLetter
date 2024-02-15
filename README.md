@@ -489,6 +489,8 @@ Don't forget to give the project a star! Thanks again!
 
 Distributed under the **MIT License**. See [`LICENSE`][license-url] for more information.
 
+> :warning: The license above does not apply to the sample logo file `/src/logo.png`. For more information please have a look at [Logoipsum's terms of license](https://logoipsum.com/license).
+
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
