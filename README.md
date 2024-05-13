@@ -263,7 +263,7 @@ Optional: In case you have modified the template (and therefore need additional 
 > tlmgr info hyphen-german --list
 
 # List installed packages
-> List installed packages
+> tlmgr list --only-installed
 ```
 
 **Done!** You can continue with [Installation](#installation).
