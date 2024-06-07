@@ -295,8 +295,8 @@ Before writing your first letter you should customize the template. To do so, pl
 ├── src
 │   ├── header.lco    Header/Footer/Information Block Template
 │   ├── letter.tex    Individual Letter
-│   ├── logo.png    Sample Logo
-│   └── template.lco      General Letter Template
+│   ├── logo.png      Sample Logo
+│   └── template.lco  General Letter Template
 ...
 ```
 
@@ -360,12 +360,14 @@ Well, for writing just one single letter you may skip this section. But in case 
 
 #### Change language
 
+Edit the following line to change the letter's language: 
+
 ```latex
 \usepackage[ngerman]{babel}
 ```
-> :warning: At the moment, only `ngerman`, `english`, `USenglish`, and `UKenglish` are supported.
+> :warning: At the moment, only `ngerman`, `english`, `USenglish`, and `UKenglish` (all case-sensitive) are supported.
 
-This will not only change the  information block's descriptors but also any text within the letter for which you have defined language-dependent variables.
+This will not only change the information block's descriptors but also any text within the letter for which you have defined language-dependent variables. It also loads language-specific hyphenation patterns.
 
 #### Variables
 
@@ -377,7 +379,7 @@ You can define your own variables by using the following command, where `varname
 To use the variable or its description (`*`) within the letter just use:
 ```latex
 \usekomavar{varname}  % Variable
-\usekomavar*{varname}  % Descriptor
+\usekomavar*{varname} % Descriptor
 ```
 
 For multi-lingual documents you can define language-dependent values:
