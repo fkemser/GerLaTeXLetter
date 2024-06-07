@@ -34,7 +34,7 @@
 %                                       like to change the letter's general
 %                                       appearance.
 %
-%         TODO:   Please also look at the 'TODO:' tagged lines in this script.
+%         TODO:   See 'TODO:'-tagged lines below.
 %===============================================================================
 %===============================================================================
 %  IMPORT
@@ -46,7 +46,26 @@
 %-------------------------------------------------------------------------------
 %  Packages
 %-------------------------------------------------------------------------------
+%                    TODO: REPLACE 'ngerman' by your locale
+%
+%  For a full list of locales please have a look at:
+%    http://mirrors.ctan.org/macros/latex/required/babel/base/babel.pdf
+%
+%  At the moment, only `ngerman`, `english`, `USenglish`, and `UKenglish`
+%  (all case-sensitive) are supported.
+%
+%                                      |||
+%                                     \|||/
+%                                      \|/
+%-------------------------------------------------------------------------------
 \usepackage[ngerman]{babel} % Spelling / Hyphenation
+%-------------------------------------------------------------------------------
+%                                      /|\
+%                                     /|||\
+%                                      |||
+%
+%                    TODO: REPLACE 'ngerman' by your locale
+%-------------------------------------------------------------------------------
 \usepackage{blindtext}      % Text samples
 
 %  DO NOT EDIT - LOAD LETTER TEMPLATE - DO NOT EDIT
@@ -77,6 +96,7 @@
 %-------------------------------------------------------------------------------
 %  Default
 %\setkomavar{varname}{value_default}
+
 %  ngerman
 \IfLanguagePatterns{ngerman}{%
 %  \setkomavar{varname}{value_ngerman}
@@ -94,61 +114,86 @@
 %===============================================================================
 %  ADDRESSEE
 %===============================================================================
-%               TODO: PUT INFORMATION ABOUT YOUR RECIPIENT HERE
+%                TODO: PUT INFORMATION ABOUT YOUR RECIPIENT HERE
 %
-%                                        |||
-%                                       \|||/
-%                                        \|/
+%                                      |||
+%                                     \|||/
+%                                      \|/
 %===============================================================================
 %-------------------------------------------------------------------------------
 %  Addressee-independent
 %-------------------------------------------------------------------------------
-%  Delivery Information ("Zustellvermerk")
+%  Default
+%  Delivery Information
 \setkomavar{specialmail}{%
 \\
 \\
-Persönlich / Vertraulich%
+Personal / Confidential%
 }
-
 %  Subject
-\setkomavar{subject}{Betreff}
-
+\setkomavar{subject}{Subject}
 %  Complimentary closing
-\setkomavar{closing}{Mit freundlichen Grüßen\\im Auftrag}
-
-%  Signature (only uncomment if different from header.lco
+\setkomavar{closing}{Sincerely,}
+%  Signature (only uncomment if different from header.lco)
 %\setkomavar{signature}{Max Mustermann}
-
 %  Enclosure
 \setkomavar{encl}{%
-  Anlage 1\\
-  Anlage 2%
+  Enclosure 1\\
+  Enclosure 2%
 }
-
 %  CC
 \setkomavar{cc}{%
+}
+
+%  ngerman
+\IfLanguagePatterns{ngerman}{%
+  %  Delivery Information
+  \setkomavar{specialmail}{%
+  \\
+  \\
+  Persönlich / Vertraulich%
+  }
+  %  Subject
+  \setkomavar{subject}{Betreff}
+  %  Complimentary closing
+  \setkomavar{closing}{Mit freundlichen Grüßen\\im Auftrag}
+  %  Signature (only uncomment if different from header.lco)
+  %\setkomavar{signature}{Max Mustermann}
+  %  Enclosure
+  \setkomavar{encl}{%
+    Anlage 1\\
+    Anlage 2%
+  }
+  %  CC
+  \setkomavar{cc}{%
+  }
 }
 
 %-------------------------------------------------------------------------------
 %  Addressee-specific
 %-------------------------------------------------------------------------------
+%  Default
 %  Full name
 \setkomavar{toname}{Erika Mustermann}
-
 %  Mail address
 \setkomavar{toaddress}{%
   Musterstraße 9\\
   12345 Musterstadt%
 }
-
 %  Salutation
-\setkomavar{opening}{Sehr geehrte Frau Mustermann,}
+\setkomavar{opening}{Dear Ms. Mustermann}
+
+%  ngerman
+\IfLanguagePatterns{ngerman}{%
+  %  Salutation
+  \setkomavar{opening}{Sehr geehrte Frau Mustermann,}
+}
 %===============================================================================
-%                                        /|\
-%                                       /|||\
-%                                        |||
+%                                      /|\
+%                                     /|||\
+%                                      |||
 %
-%               TODO: PUT INFORMATION ABOUT YOUR RECIPIENT HERE
+%                TODO: PUT INFORMATION ABOUT YOUR RECIPIENT HERE
 %===============================================================================
 
 %===============================================================================
@@ -167,12 +212,11 @@ Persönlich / Vertraulich%
   %-----------------------------------------------------------------------------
   %  BODY
   %-----------------------------------------------------------------------------
-  %-----------------------------------------------------------------------------
   %                         TODO: WRITE YOUR LETTER HERE
   %
-  %                                      |||
-  %                                     \|||/
-  %                                      \|/
+  %                                     |||
+  %                                    \|||/
+  %                                     \|/
   %-----------------------------------------------------------------------------
   % Please insert a manual '\pagebreak' after each page, otherwise the
   % textwidth will not be calculated correctly.
@@ -182,9 +226,9 @@ Persönlich / Vertraulich%
 
   \blindtext
   %-----------------------------------------------------------------------------
-  %                                      /|\
-  %                                     /|||\
-  %                                      |||
+  %                                     /|\
+  %                                    /|||\
+  %                                     |||
   %
   %                         TODO: WRITE YOUR LETTER HERE
   %-----------------------------------------------------------------------------
