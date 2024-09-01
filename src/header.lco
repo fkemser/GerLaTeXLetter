@@ -50,6 +50,20 @@
 \renewcommand{\fromaddrlocality}{Musterstadt}   % City, e.g. 'Anytown'
 \renewcommand{\fromaddrregion}{}                % Region (state or province), e.g. 'CA'
 \renewcommand{\fromaddrpostal}{12345}           % Postal code, e.g. '12345'
+
+%  Delivery Addressing Properties (Country)
+%
+%  Set this variable in case the letter's language does not match your country.
+%  This ensure that your country's address format is used and not the
+%  language's one.
+%
+%  At the moment only 'GERMANY', 'UNITED KINGDOM', and 'USA' are supported.
+%
+%  Example: You set the letter's language to 'USenglish'
+%     '\usepackage[USenglish]{babel}'
+%  but your address is located in Germany. So in this case you would set
+%     '\renewcommand{\fromaddrcountry}{GERMANY}'
+%
 \renewcommand{\fromaddrcountry}{}               % Country, e.g. 'USA'
 
 %  Communications Properties

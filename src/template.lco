@@ -514,47 +514,99 @@
 %-------------------------------------------------------------------------------
 %  Create language-dependent sender's address from vCard attributes
 %-------------------------------------------------------------------------------
-%  ngerman
-\IfLanguagePatterns{ngerman}{%
-  \renewcommand{\fromaddrmail}{%
-    \expandafter\notblank\expandafter{\fromaddrpobox}{%
-      Postfach \fromaddrpobox%
-    }{%
-      \fromaddrstreet%
-      \expandafter\notblank\expandafter{\fromaddrapart}{ // \fromaddrapart}{}%
-    }\newline%
-    \fromaddrpostal\ \fromaddrlocality%
-  }
-}
+\expandafter\notblank\expandafter{\fromaddrcountry}{%
+  %-----------------------------------------------------------------------------
+  %  Case 1 - '\fromaddrcountry' not empty
+  %-----------------------------------------------------------------------------
+  %  GERMANY
+  \forcsvlist{\listadd\listcountry}{GERMANY, Germany}
+  \xifinlist{\fromaddrcountry}{\listcountry}{%
+    \renewcommand{\fromaddrmail}{%
+      \expandafter\notblank\expandafter{\fromaddrpobox}{%
+        Postfach \fromaddrpobox%
+      }{%
+        \fromaddrstreet%
+        \expandafter\notblank\expandafter{\fromaddrapart}{ // \fromaddrapart}{}%
+      }\newline%
+      \fromaddrpostal\ \fromaddrlocality\newline%
+      \fromaddrcountry%
+    }
+  }{}
 
-%  UKenglish
-\IfLanguagePatterns{UKenglish}{%
-  \renewcommand{\fromaddrmail}{%
-    \expandafter\notblank\expandafter{\fromaddrpobox}{%
-      PO Box \fromaddrpobox%
-    }{%
-      \fromaddrstreet%
-    }\newline%
-    \fromaddrlocality\newline%
-    \expandafter\notblank\expandafter{\fromaddrregion}{\fromaddrregion\newline}{}%
-    \fromaddrpostal%
-    \expandafter\notblank\expandafter{\fromaddrcountry}{\newline}{}%
-    \fromaddrcountry%
-  }
-}
+  %  UK
+  \renewcommand{\listcountry}{}
+  \forcsvlist{\listadd\listcountry}{UNITED KINGDOM, United Kingdom, UK}
+  \xifinlist{\fromaddrcountry}{\listcountry}{%
+    \renewcommand{\fromaddrmail}{%
+      \expandafter\notblank\expandafter{\fromaddrpobox}{%
+        PO Box \fromaddrpobox%
+      }{%
+        \fromaddrstreet%
+      }\newline%
+      \fromaddrlocality\newline%
+      \expandafter\notblank\expandafter{\fromaddrregion}{\fromaddrregion\newline}{}%
+      \fromaddrpostal\newline%
+      \fromaddrcountry%
+    }
+  }{}
 
-%  USenglish
-\IfLanguagePatterns{USenglish}{%
-  \renewcommand{\fromaddrmail}{%
-    \expandafter\notblank\expandafter{\fromaddrpobox}{%
-      PO BOX \fromaddrpobox%
-    }{%
-      \fromaddrstreet%
-      \expandafter\notblank\expandafter{\fromaddrapart}{, \fromaddrapart}{}%
-    }\newline%
-    \fromaddrlocality,\ \fromaddrregion\ \fromaddrpostal%
-    \expandafter\notblank\expandafter{\fromaddrcountry}{\newline}{}%
-    \fromaddrcountry%
+  %  USA
+  \renewcommand{\listcountry}{}
+  \forcsvlist{\listadd\listcountry}{USA, U.S.A.}
+  \xifinlist{\fromaddrcountry}{\listcountry}{%
+    \renewcommand{\fromaddrmail}{%
+      \expandafter\notblank\expandafter{\fromaddrpobox}{%
+        PO BOX \fromaddrpobox%
+      }{%
+        \fromaddrstreet%
+        \expandafter\notblank\expandafter{\fromaddrapart}{, \fromaddrapart}{}%
+      }\newline%
+      \fromaddrlocality,\ \fromaddrregion\ \fromaddrpostal\newline%
+      \fromaddrcountry%
+    }
+  }{}
+}{%
+  %-----------------------------------------------------------------------------
+  %  Case 2 - '\fromaddrcountry' is empty - Derive format from current language
+  %-----------------------------------------------------------------------------
+  %  ngerman
+  \IfLanguagePatterns{ngerman}{%
+    \renewcommand{\fromaddrmail}{%
+      \expandafter\notblank\expandafter{\fromaddrpobox}{%
+        Postfach \fromaddrpobox%
+      }{%
+        \fromaddrstreet%
+        \expandafter\notblank\expandafter{\fromaddrapart}{ // \fromaddrapart}{}%
+      }\newline%
+      \fromaddrpostal\ \fromaddrlocality%
+    }
+  }
+
+  %  UKenglish
+  \IfLanguagePatterns{UKenglish}{%
+    \renewcommand{\fromaddrmail}{%
+      \expandafter\notblank\expandafter{\fromaddrpobox}{%
+        PO Box \fromaddrpobox%
+      }{%
+        \fromaddrstreet%
+      }\newline%
+      \fromaddrlocality\newline%
+      \expandafter\notblank\expandafter{\fromaddrregion}{\fromaddrregion\newline}{}%
+      \fromaddrpostal%
+    }
+  }
+
+  %  USenglish
+  \IfLanguagePatterns{USenglish}{%
+    \renewcommand{\fromaddrmail}{%
+      \expandafter\notblank\expandafter{\fromaddrpobox}{%
+        PO BOX \fromaddrpobox%
+      }{%
+        \fromaddrstreet%
+        \expandafter\notblank\expandafter{\fromaddrapart}{, \fromaddrapart}{}%
+      }\newline%
+      \fromaddrlocality,\ \fromaddrregion\ \fromaddrpostal%
+    }
   }
 }
 
